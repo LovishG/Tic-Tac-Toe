@@ -1,3 +1,6 @@
+var cancel = document.getElementById('cancel');
+var play = document.getElementById('play-again');
+
 var gameBox;
 var playerO = "O";
 var playerX = "X";
@@ -9,6 +12,8 @@ window.onload = function () {
 };
 
 function setGame() {
+  gameOver = false;
+  currPlayer = playerO
   gameBox = [
     [" ", " ", " "],
     [" ", " ", " "],
@@ -76,6 +81,7 @@ function checkWinner() {
         tile.classList.add("winner");
       }
       gameOver = true;
+      document.getElementById('cont').style.display = 'block';
       return;
     }
   }
@@ -94,6 +100,7 @@ function checkWinner() {
         tile.classList.add("winner");
       }
       gameOver = true;
+      document.getElementById('cont').style.display = 'block';
       return;
     }
   }
@@ -109,6 +116,7 @@ function checkWinner() {
       tile.classList.add("winner");
     }
     gameOver = true;
+    document.getElementById('cont').style.display = 'block';
     return;
   }
 
@@ -130,6 +138,20 @@ function checkWinner() {
     tile = document.getElementById("2-0");
     tile.classList.add("winner");
     gameOver = true;
+
+    document.getElementById('cont').style.display = 'block';
     return;
   }
 }
+
+  cancel.addEventListener('click', (e)=>{
+    document.getElementById('cont').style.display = 'none';
+  });
+  play.addEventListener('click', (e)=>{
+    document.getElementById('cont').style.display = 'none';
+    const myNode = document.getElementById("game-box");
+    while (myNode.firstChild) {
+    myNode.removeChild(myNode.lastChild);
+  }
+    setGame();
+  });
