@@ -89,7 +89,7 @@ h4 {
   width: 100%;
 }
 
-.button-27 {
+.button-play {
   appearance: none;
   background-color: #60a8fc;
   border: 2px solid #1a1a1a;
@@ -118,21 +118,21 @@ h4 {
   will-change: transform;
 }
 
-.button-27:disabled {
+.button-play:disabled {
   pointer-events: none;
 }
 
-.button-27:hover {
+.button-play:hover {
   box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
   transform: translateY(-2px);
 }
 
-.button-27:active {
+.button-play:active {
   box-shadow: none;
   transform: translateY(0);
 }
 
-.button-28 {
+.button-cancel {
   appearance: none;
   background-color: rgba(232, 51, 51, 0.7);
   border: 2px solid #1a1a1a;
@@ -161,16 +161,16 @@ h4 {
   will-change: transform;
 }
 
-.button-28:disabled {
+.button-cancel:disabled {
   pointer-events: none;
 }
 
-.button-28:hover {
+.button-cancel:hover {
   box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
   transform: translateY(-2px);
 }
 
-.button-28:active {
+.button-cancel:active {
   box-shadow: none;
   transform: translateY(0);
 }
