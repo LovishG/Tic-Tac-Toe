@@ -1,19 +1,23 @@
-var cancel = document.getElementById('cancel');
-var play = document.getElementById('play-again');
+var cancel = document.getElementById("cancel");
+var play = document.getElementById("play-again");
 
 var gameBox;
 var playerO = "O";
 var playerX = "X";
 var currPlayer = playerO;
 var gameOver = false;
-
+let moves = 0;
+// apis variables
+let fullPostApiLink = "";
+const getApiLink = "https://localhost:7268/api/ManVsComputer/get";
+let postBaseApiLink = "https://localhost:7268/api/ManVsComputer/set?location=";
 window.onload = function () {
   setGame();
 };
 
 function setGame() {
   gameOver = false;
-  currPlayer = playerO
+  currPlayer = playerO;
   gameBox = [
     [" ", " ", " "],
     [" ", " ", " "],
@@ -38,7 +42,7 @@ function setGame() {
   }
 }
 
-function setTile() {
+async function setTile() {
   if (gameOver) {
     return;
   }
@@ -52,19 +56,58 @@ function setTile() {
     return;
   }
 
-  gameBox[r][c] = currPlayer; //mark the gameBox
-  this.innerText = currPlayer; //mark the gameBox on html
+  let postApiSuffix =''+ r + c;
+  fullPostApiLink = postBaseApiLink + postApiSuffix;
+  
 
-  //change players
-  if (currPlayer == playerO) {
-    currPlayer = playerX;
-  } else {
-    currPlayer = playerO;
-  }
+  await fetch(fullPostApiLink, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+  }).catch(error => console.error('Unable to add item.', error));
 
+
+
+  gameBox[r][c] = playerO; //mark the gameBox
+  this.innerText = playerO; //mark the gameBox on html
+  moves++;
+  // //change players
+  // if (currPlayer == playerO) {
+  //   currPlayer = playerX;
+  // } else {
+  //   currPlayer = playerO;
+  // }
+  console.log("calling get Api");
   //check winner
+  if(moves<5){
+  await fetch(getApiLink)
+.then(data => {
+  console.log(data);
+return data.json();
+})
+.then(index => {
+console.log(index.Id);
+let tileId = index.Id.split('').join('-');
+console.log(tileId);
+let div = document.getElementById(tileId);
+div.innerText = playerX;
+gameBox[index.Id[0]][index.Id[1]] = playerX;
+return index.Id;
+})
+.catch((error) => {
+  console.error("Error:", error);
+});
+}
   checkWinner();
 }
+
+
+
+
+
+
 
 function checkWinner() {
   //horizontally, check 3 rows
@@ -81,7 +124,7 @@ function checkWinner() {
         tile.classList.add("winner");
       }
       gameOver = true;
-      document.getElementById('cont').style.display = 'block';
+      document.getElementById("cont").style.display = "block";
       return;
     }
   }
@@ -100,7 +143,7 @@ function checkWinner() {
         tile.classList.add("winner");
       }
       gameOver = true;
-      document.getElementById('cont').style.display = 'block';
+      document.getElementById("cont").style.display = "block";
       return;
     }
   }
@@ -116,7 +159,7 @@ function checkWinner() {
       tile.classList.add("winner");
     }
     gameOver = true;
-    document.getElementById('cont').style.display = 'block';
+    document.getElementById("cont").style.display = "block";
     return;
   }
 
@@ -139,19 +182,20 @@ function checkWinner() {
     tile.classList.add("winner");
     gameOver = true;
 
-    document.getElementById('cont').style.display = 'block';
+    document.getElementById("cont").style.display = "block";
     return;
   }
 }
 
-  cancel.addEventListener('click', (e)=>{
-    document.getElementById('cont').style.display = 'none';
-  });
-  play.addEventListener('click', (e)=>{
-    document.getElementById('cont').style.display = 'none';
-    const myNode = document.getElementById("game-box");
-    while (myNode.firstChild) {
+cancel.addEventListener("click", (e) => {
+  document.getElementById("cont").style.display = "none";
+});
+play.addEventListener("click", (e) => {
+  document.getElementById("cont").style.display = "none";
+  const myNode = document.getElementById("game-box");
+  while (myNode.firstChild) {
     myNode.removeChild(myNode.lastChild);
   }
-    setGame();
-  });
+  moves=0;
+  setGame();
+});
